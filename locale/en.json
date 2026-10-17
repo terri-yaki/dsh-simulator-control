@@ -1,0 +1,6 @@
+{
+  "meta": {
+    "title": "Simulator Control",
+    "description": "Operate the iOS Simulator from chat: auto-discover and boot devices, install and launch apps, drive the UI, run UI test flows with assertions, capture screenshots and video, and read logs."
+  }
+}

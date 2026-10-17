@@ -1,0 +1,7 @@
+# Simulator Control bundle: inserts the iOS Simulator Host plugin.
+# The plugin wraps `xcrun simctl` (device/app lifecycle, screenshots, logs) and
+# AXe (accessibility-driven taps, swipes, typing and UI inspection).
+- insert:
+    - id: simulator-control
+      name: '@local/dsh-simulator-control'
+      config: {}
