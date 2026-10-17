@@ -1,5 +1,7 @@
 # Simulator Control
 
+[github.com/terri-yaki/dsh-simulator-control](https://github.com/terri-yaki/dsh-simulator-control) · MIT licensed · requires macOS + Xcode + [AXe](https://github.com/cameroncooke/AXe)
+
 A DeepSeek Harness Host plugin that lets agents fully operate the macOS **iOS Simulator** from chat:
 
 - **auto-discovery and boot** — finds installed simulators, picks a suitable iPhone when nothing is booted, and boots it on demand;
