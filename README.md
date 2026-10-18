@@ -177,7 +177,7 @@ MIT — see [LICENSE](LICENSE). [AXe](https://github.com/cameroncooke/AXe) is a 
 
 [github.com/terri-yaki/dsh-simulator-control](https://github.com/terri-yaki/dsh-simulator-control) · MIT 授權 · 需要 macOS、Xcode 與 [AXe](https://github.com/cameroncooke/AXe)
 
-這是一個 DeepSeek Harness 的 Host 外掛，讓 Agent 可以直接從對話中完整操作 macOS 上的 **iOS 模擬器**：
+這是一個 DeepSeek Harness 的 Host 插件，讓 Agent 可以直接從對話中完整操作 macOS 上的 **iOS 模擬器**：
 
 - **自動探索與啟動** — 自動列出已安裝的模擬器；若目前沒有啟動中的模擬器，會挑選合適的 iPhone 並按需啟動；
 - **App 管理** — 列出已安裝 App、在 Xcode 的 DerivedData 中尋找模擬器 `.app` 建置產物、安裝、啟動、結束、解除安裝，並取得容器路徑；
@@ -186,7 +186,7 @@ MIT — see [LICENSE](LICENSE). [AXe](https://github.com/cameroncooke/AXe) is a 
 - **測試** — 一次 `sim_test` 呼叫即可執行有序步驟流程，並以會等待元素出現的 `assert` 檢查，逐步驟回報通過／失敗，最後附加一張螢幕快照；
 - **側邊面板** — Harness Web GUI 的右側邊欄提供一個分頁，顯示即時畫面，並支援點按、輸入、主畫面與啟動／關閉。
 
-外掛結合兩個後端：
+插件結合兩個後端：
 
 | 後端 | 用途 |
 | --- | --- |
@@ -208,17 +208,17 @@ AXe 透過 Apple 的 HID／輔助使用通道驅動模擬器，而非 macOS 的 
 
 ## 安裝
 
-此外掛安裝於 `desktop` 設定檔（profile），來源就是本專案目錄。重新安裝或更新：
+此插件安裝於 `desktop` 設定檔（profile），來源就是本專案目錄。重新安裝或更新：
 
 ```
 plugin_manager({ action: "install_bundle", target: "/Users/terry/workspace/dsh-simulator-control" })
 ```
 
-若套件已安裝，請先 `remove_bundle` 再 `install_bundle`（設定檔的接線由外掛管理器負責，請勿手動編輯設定檔）。
+若套件已安裝，請先 `remove_bundle` 再 `install_bundle`（設定檔的接線由插件管理器負責，請勿手動編輯設定檔）。
 
 ## 工具
 
-當只有一個模擬器啟動中時，所有裝置工具都不需要 `device` 參數。若沒有任何模擬器啟動，外掛會啟動自動選擇的裝置（見下文），並在結果中說明。`sim_devices` 與 `sim_doctor` 會顯示自動啟動的目標裝置。
+當只有一個模擬器啟動中時，所有裝置工具都不需要 `device` 參數。若沒有任何模擬器啟動，插件會啟動自動選擇的裝置（見下文），並在結果中說明。`sim_devices` 與 `sim_doctor` 會顯示自動啟動的目標裝置。
 
 | 工具 | 用途 |
 | --- | --- |
@@ -248,7 +248,7 @@ plugin_manager({ action: "install_bundle", target: "/Users/terry/workspace/dsh-s
 
 第一次自動啟動會反映在工具結果中（例如 `Auto-booted "iPhone 17" ...`）。任何工具都可傳入 `device`，以名稱或 UDID 指定模擬器。
 
-環境變數覆寫（於外掛載入時讀取；重新啟動或重新安裝後生效）：
+環境變數覆寫（於插件載入時讀取；重新啟動或重新安裝後生效）：
 
 | 變數 | 作用 |
 | --- | --- |
@@ -300,21 +300,21 @@ sim_video({ "action": "stop" })
 
 ## Web 側邊面板
 
-外掛會在 Web GUI 的右側邊欄註冊一個 **Simulator（模擬器）** 分頁：
+插件會在 Web GUI 的右側邊欄註冊一個 **Simulator（模擬器）** 分頁：
 
 - 即時畫面約每秒更新一次（伺服器端會先縮圖）；
 - 裝置選擇器，以及 **啟動／關閉**、**主畫面**、**重新整理** 控制項；
 - 在畫面上點按任何位置，即會在模擬器的對應位置點按；
 - 在已聚焦的欄位輸入文字後按 **Send**（或 Enter），即可在裝置上輸入。
 
-從對話標題列的右側邊欄按鈕開啟，再按 **＋**（新增分頁）並在指南中選擇 **Simulator**。分頁型別屬於外掛的 Client 端，因此安裝新版本後需**重新整理頁面一次**（`Cmd+R`）才會出現面板。
+從對話標題列的右側邊欄按鈕開啟，再按 **＋**（新增分頁）並在指南中選擇 **Simulator**。分頁型別屬於插件的 Client 端，因此安裝新版本後需**重新整理頁面一次**（`Cmd+R`）才會出現面板。
 
 面板會呼叫同源的 Host 路由 `/simulator-control/`（`state`、`frame`、`action`），這些路由套用 Web GUI 的 Connection 信任檢查——沒有瀏覽器已驗證工作階段的請求會以 401 拒絕。
 
 ## 已知的模擬器行為（Xcode 26.4+／27）
 
 - **首次開機較慢接受輸入：** 在「第一次」開機後的約 30–120 秒內，HID 點按可能回報成功卻被忽略。`sim_boot` 會預熱輔助使用連線；若第一次互動看似無效，請用 `sim_describe_ui` 重新確認並重試。
-- **請保持 Xcode Device Hub 運作：** 結束 Device Hub 會關閉所有已啟動的模擬器。此外掛只會開啟它，絕不會結束它。
+- **請保持 Xcode Device Hub 運作：** 結束 Device Hub 會關閉所有已啟動的模擬器。此插件只會開啟它，絕不會結束它。
 - **重複標籤會失敗：** 當多個元素共用同一標籤時，請以 `id`（輔助使用識別碼）點按；`sim_describe_ui` 會以 `#id` 顯示識別碼。
 - **同時啟動多個模擬器是常態：** 若同時有多個模擬器啟動，請傳入 `device`；工具錯誤訊息會列出候選裝置。
 - **轉場：** 點按後立即呼叫 `sim_describe_ui`，可能短暫看到動畫／卡片樹狀結構；稍等一秒再重新檢視。
@@ -332,7 +332,7 @@ MIT — 詳見 [LICENSE](LICENSE)。[AXe](https://github.com/cameroncooke/AXe) �
 
 ## 檔案
 
-- `index.js` — 外掛入口：工具、流程執行器、錄影管理器、提示詞章節。
+- `index.js` — 插件入口：工具、流程執行器、錄影管理器、提示詞章節。
 - `client.js` — Web Client 端：右側邊欄分頁型別、即時面板、語系字典。
 - `lib/web.js` — 側邊面板 HTTP 路由（state、frames、actions）與信任檢查。
 - `lib/exec.js` — 子程序執行、輸出上限、AXe 探索。
