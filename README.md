@@ -170,5 +170,3 @@ MIT — see [LICENSE](LICENSE). [AXe](https://github.com/cameroncooke/AXe) is a 
 - `lib/format.js` — device/app/AX-tree formatting.
 - `lib/args.js` — defensive argument readers.
 - `cordis.patch.yml`, `locale/*.json`, `icon.svg` — bundle and display metadata.
-
----
